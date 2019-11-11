@@ -13,17 +13,9 @@ router.get("/", (req, res) => {
 });
 
 router.post("/hash", (req, res) => {
-  bcrypt.compare("B4c0//", hash, function(err, res) {
-    return res.status(200).json({ message: "Its working!" });
-  });
-  bcrypt.compare("not_bacon", hash, function(err, res) {
-    return res.status(500).json({ message: "Internal Server Error!" });
-  });
-
-  // As of bcryptjs 2.4.0, compare returns a promise if callback is omitted:
-  bcrypt.compare("B4c0//", hash).then(res => {
-    return res.status(200).json({ message: "Posted!" });
-  });
+  const password = req.body.password;
+  const hash = bcrypt.hashSync(password, 8);
+  res.status(200).json({ password, hash });
 });
 
 module.exports = router;
